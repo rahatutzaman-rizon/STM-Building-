@@ -361,6 +361,33 @@ margin-left: 15px;
 }
 
 
+.stm-title {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Default size for large devices */
+.stm-title {
+    font-size: 1.75rem; /* Adjust as needed */
+     
+}
+
+/* For medium devices (tablets, 768px and up) */
+@media (max-width: 991px) {
+    .stm-title {
+        font-size: 16px; /* Smaller text size */
+    }
+}
+
+/* For small devices (phones, less than 768px) */
+@media (max-width: 767px) {
+    .stm-title {
+        font-size: 14px; /* Even smaller text size */
+     
+    }
+}
+
+
 
 .slider-btn:hover .btn-after{
     margin-top: -50px;
