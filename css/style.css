@@ -1264,12 +1264,167 @@ body {
 
 
 
+/* 
+service area */
+.service-areas-section {
+    font-family: 'Arial', sans-serif;
+    color: #001659;
+}
+
+.service-areas-section .bg-primary {
+    background-color: #001659 !important;
+}
+
+.service-areas-section .text-primary {
+    color: #001659 !important;
+}
+
+.service-areas-section .service-card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-areas-section .service-card:hover {
+    transform: translateY(-5px);
+}
+
+.service-areas-section .icon-large {
+    font-size: 3rem;
+    color: #ff5e14;
+    margin-bottom: 1rem;
+}
+
+.service-areas-section .icon-medium {
+    font-size: 2rem;
+    color: #ff5e14;
+    margin-bottom: 0.5rem;
+}
+
+.service-areas-section .card-title {
+    color: #001659;
+    font-weight: bold;
+}
+
+.service-areas-section .feature-card {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    height: 100%;
+    border-bottom: 3px solid #ff5e14;
+}
+
+.service-areas-section .feature-card h4 {
+    color: #001659;
+    margin-top: 1rem;
+}
+
+.service-areas-section .feature-card p {
+    color: #6c757d;
+}
+
+.service-areas-section .coverage-map {
+    margin-top: 2rem;
+}
+
+.service-areas-section .card {
+    height: 100%;
+}
+
+.service-areas-section .btn-outline-primary {
+    color: #001659;
+    border-color: #001659;
+}
+
+.service-areas-section .btn-outline-primary:hover {
+    background-color: #001659;
+    color: white;
+}
+
+.service-areas-section .lead {
+    color: #ff5e14;
+}
+
+.service-areas-section .coverage-map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.service-areas-section .coverage-map {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 22, 89, 0.1);
+    width: 70%;
+    max-width: 800px;
+}
+
+.service-areas-section .coverage-map img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-areas-section .coverage-map:hover img {
+    transform: scale(1.05);
+}
+
+/* .service-areas-section .coverage-map::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(0, 22, 89, 0.6), rgba(255, 94, 20, 0.6));
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+} */
+
+.service-areas-section .coverage-map:hover::after {
+    opacity: 1;
+}
+
+.service-areas-section .coverage-map-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.service-areas-section .coverage-map:hover .coverage-map-title {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .service-areas-section .coverage-map {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-areas-section .service-card {
+        margin-bottom: 1.5rem;
+    }
+}
 
 
 
 
-
-
+/* end */
 
 /* breadcrumb */
 .breadcrumb-area {
