@@ -269,11 +269,14 @@
                                         </div>        
                                     </div>
                                 </div>
-            
+            <!-- form -->
+
+
+
                                 <div class="col-lg-4 offset-lg-1 w-sm-25 mt-sm-12">
                                     <div class="form-container">
                                         <h4>Request a Free Service Today</h4>
-                                        <form>
+                                        <form id="serviceRequestForm">
                                             <div class="mb-4">
                                                 <input type="text" class="form-control" id="name" placeholder="Name*" required>
                                             </div>
@@ -288,6 +291,9 @@
                                             </div>
                                             <button type="submit" class="btn btn-sm w-100">Submit Now</button>
                                         </form>
+                                        <div id="resultMessage" class="mt-2">
+
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -1549,6 +1555,98 @@
             </div>
         </footer>
         <!-- footer-end -->
+
+
+
+
+      
+
+        
+
+
+        <!-- api fetch -->
+
+        <script>
+            // Frontend JavaScript to handle form submission
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('serviceRequestForm');
+                const resultMessage = document.getElementById('resultMessage');
+            
+                form.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+            
+                    const formData = {
+                        name: document.getElementById('name').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        phone: document.getElementById('phone').value.trim(),
+                        message: document.getElementById('message').value.trim()
+                    };
+            
+                    const jsonData = JSON.stringify(formData);
+                    const apiUrl = 'http://localhost:5000/form'; // Your backend API endpoint
+            
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: jsonData
+                        });
+            
+                        if (response.ok) {
+                            resultMessage.innerHTML = '<div class="alert alert-success">Service request submitted successfully!</div>';
+                            form.reset();
+                        } else {
+                            resultMessage.innerHTML = '<div class="alert alert-danger">Failed to submit service request. Try again.</div>';
+                        }
+                    } catch (error) {
+                        resultMessage.innerHTML = '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+                        console.error('Error:', error);
+                    }
+                });
+            });
+            </script>
+            
+
+        <!-- api fetch end -->
+
+        <!-- email -->
+         <!-- Add EmailJS SDK -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+<script>
+  // Initialize EmailJS with your user ID
+  emailjs.init("Y4FN7ZSrW0VCQal-t"); // Replace with your actual user ID from EmailJS
+
+  document.getElementById('serviceRequestForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    // Create the email data
+    const emailParams = {
+      from_name: name,
+      from_email: email,
+      phone: phone,
+      message: message
+    };
+
+    // Send email using EmailJS
+    emailjs.send('service_q21t4tn', 'template_s1dxxj8', emailParams)
+      .then(function(response) {
+        console.log('Success:', response);
+        document.getElementById('resultMessage').innerHTML = '<p class="text-success">Your message has been sent successfully!</p>';
+        document.getElementById('serviceRequestForm').reset();
+      }, function(error) {
+        console.log('Error:', error);
+        document.getElementById('resultMessage').innerHTML = '<p class="text-danger">There was an error sending your message. Please try again later.</p>';
+      });
+  });
+</script>
+
 
 
 
