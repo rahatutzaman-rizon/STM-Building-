@@ -1583,7 +1583,7 @@
                     };
             
                     const jsonData = JSON.stringify(formData);
-                    const apiUrl = 'http://localhost:5000/form'; // Your backend API endpoint
+                    const apiUrl = 'https://stm-server.vercel.app/form'; // Your backend API endpoint
             
                     try {
                         const response = await fetch(apiUrl, {
@@ -1630,7 +1630,7 @@
               };
           
               // Send form data to the server
-              fetch('http://localhost:5000/send-email', {
+              fetch('https://stm-server.vercel.app', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
