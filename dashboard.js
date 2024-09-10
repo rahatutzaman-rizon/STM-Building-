@@ -1,4 +1,4 @@
-const apiBaseUrl = 'http://localhost:5000'; // API base URL
+const apiBaseUrl = 'https://stm-server.vercel.app'; // API base URL
 
 
 
