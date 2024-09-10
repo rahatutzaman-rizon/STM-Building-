@@ -1,0 +1,28 @@
+body {
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  
+  .table img {
+    border-radius: 50%;
+  }
+  
+  .modal-content {
+    border-radius: 0.5rem;
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .modal-body {
+    padding: 2rem;
+  }
+  
