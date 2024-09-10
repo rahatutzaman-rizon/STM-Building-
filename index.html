@@ -146,8 +146,7 @@
 												
 											</li>
                                             <li><a href="about.html">About Us</a></li>
-                                            <li><a href="login.html">Dashboard</a></li>
-                                            <li class="has-sub"><a href="shop.html">Shop</a>
+                                            
 							</li>
                                                    
                             <li class="has-sub"> 
@@ -1611,42 +1610,54 @@
         <!-- api fetch end -->
 
         <!-- email -->
+
+        <script>
+            document.getElementById('serviceRequestForm').addEventListener('submit', function (event) {
+              event.preventDefault(); // Prevent default form submission
+          
+              // Get form values
+              const name = document.getElementById('name').value;
+              const email = document.getElementById('email').value;
+              const phone = document.getElementById('phone').value;
+              const message = document.getElementById('message').value;
+          
+              // Create the email data
+              const formData = {
+                name,
+                email,
+                phone,
+                message
+              };
+          
+              // Send form data to the server
+              fetch('http://localhost:5000/send-email', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+              })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.message === 'Email sent successfully!') {
+                    document.getElementById('resultMessage').innerHTML = '<p class="text-success">Your message has been sent successfully!</p>';
+                    document.getElementById('serviceRequestForm').reset();
+                  } else {
+                    document.getElementById('resultMessage').innerHTML = '<p class="text-danger">There was an error sending your message. Please try again later.</p>';
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  document.getElementById('resultMessage').innerHTML = '<p class="text-danger">There was an error sending your message. Please try again later.</p>';
+                });
+            });
+        </script>
+
+        
          <!-- Add EmailJS SDK -->
 <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 
-<script>
-  // Initialize EmailJS with your user ID
-  emailjs.init("Y4FN7ZSrW0VCQal-t"); // Replace with your actual user ID from EmailJS
 
-  document.getElementById('serviceRequestForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    // Get form values
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const message = document.getElementById('message').value;
-
-    // Create the email data
-    const emailParams = {
-      from_name: name,
-      from_email: email,
-      phone: phone,
-      message: message
-    };
-
-    // Send email using EmailJS
-    emailjs.send('service_q21t4tn', 'template_s1dxxj8', emailParams)
-      .then(function(response) {
-        console.log('Success:', response);
-        document.getElementById('resultMessage').innerHTML = '<p class="text-success">Your message has been sent successfully!</p>';
-        document.getElementById('serviceRequestForm').reset();
-      }, function(error) {
-        console.log('Error:', error);
-        document.getElementById('resultMessage').innerHTML = '<p class="text-danger">There was an error sending your message. Please try again later.</p>';
-      });
-  });
-</script>
 
 
 

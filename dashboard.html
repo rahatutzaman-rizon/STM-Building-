@@ -22,6 +22,7 @@
     }
     .sidebar a.active {
       background-color: #ff5e14;
+      color: white;
     }
     .main-content {
       padding: 20px;
@@ -46,10 +47,13 @@
       <h2 class="text-center">Admin Dashboard</h2>
       <ul class="nav flex-column mt-4">
         <li class="nav-item">
-          <a href="#" class="nav-link active" id="employeeLink">Employee Information</a>
+          <a href="#" class="nav-link " id="employeeLink">Employee Information</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" id="emailLink">Email Information</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="messageLink">Message Information</a>
         </li>
         <li class="nav-item">
           <a href="index.html" class="nav-link">Back to Home</a>
@@ -59,6 +63,7 @@
 
     <!-- Main Content -->
     <div class="col-md-9 main-content">
+      <!-- Employee Section -->
       <div id="employeeSection">
         <h3>Employee Management</h3>
         <h4>Total Employees: <span id="employeeCount" class="badge bg-danger"></span></h4>
@@ -105,7 +110,34 @@
       <div id="emailSection" style="display: none;">
         <h3>Email Submissions</h3>
 
-        <!-- Email Submissions Table -->
+        <!-- Email Form -->
+        <form id="emailForm" class="mb-4">
+          <div class="mb-3">
+            <label for="adminEmail" class="form-label">Admin Email</label>
+            <input type="email" class="form-control" id="adminEmail" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Email</button>
+        </form>
+
+        <!-- Email Table -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="emailTable">
+            <!-- Emails will be dynamically populated here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Message Section -->
+      <div id="messageSection" style="display: none;">
+        <h3>Message Submissions</h3>
+
+        <!-- Message Table -->
         <table class="table table-striped">
           <thead>
             <tr>
@@ -116,8 +148,8 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="formTable">
-            <!-- Email submissions will be dynamically populated here -->
+          <tbody id="messageTable">
+            <!-- Messages will be dynamically populated here -->
           </tbody>
         </table>
       </div>
@@ -125,49 +157,43 @@
   </div>
 </div>
 
+<!-- Bootstrap Modal for Editing Employee -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editEmployeeModalLabel">Edit Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editEmployeeForm">
+          <input type="hidden" id="employeeId">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Employee Name</label>
+            <input type="text" class="form-control" id="editName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editPosition" class="form-label">Position</label>
+            <input type="text" class="form-control" id="editPosition" required>
+          </div>
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="editPhone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="editPhone" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Employee</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- JavaScript -->
 <script>
-  const apiBaseUrl = 'https://stm-server.vercel.app'; // API base URL
-
-  document.addEventListener("DOMContentLoaded", function () {
-    fetchEmployees();
-    fetchForms();
-
-    // Toggle between Employee and Email sections
-    document.getElementById("employeeLink").addEventListener("click", function () {
-      document.getElementById("employeeSection").style.display = "block";
-      document.getElementById("emailSection").style.display = "none";
-      this.classList.add("active");
-      document.getElementById("emailLink").classList.remove("active");
-    });
-
-    document.getElementById("emailLink").addEventListener("click", function () {
-      document.getElementById("employeeSection").style.display = "none";
-      document.getElementById("emailSection").style.display = "block";
-      this.classList.add("active");
-      document.getElementById("employeeLink").classList.remove("active");
-    });
-
-    // Employee Form Submission
-    document.getElementById("employeeForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = document.getElementById("name").value;
-      const position = document.getElementById("position").value;
-      const email = document.getElementById("email").value;
-      const phone = document.getElementById("phone").value;
-
-      const employee = { name, position, email, phone };
-
-      fetch(`${apiBaseUrl}/employees`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(employee),
-      })
-        .then(() => fetchEmployees());
-    });
-  });
+  const apiBaseUrl = 'http://localhost:5000'; // API base URL
 
   // Fetch and Display Employees
   function fetchEmployees() {
@@ -196,74 +222,19 @@
       });
   }
 
-  // Edit Employee
-  function editEmployee(id, name, position, email, phone) {
-    document.getElementById("name").value = name;
-    document.getElementById("position").value = position;
-    document.getElementById("email").value = email;
-    document.getElementById("phone").value = phone;
-    document.getElementById("employeeForm").onsubmit = function (e) {
-      e.preventDefault();
-      const updatedName = document.getElementById("name").value;
-      const updatedPosition = document.getElementById("position").value;
-      const updatedEmail = document.getElementById("email").value;
-      const updatedPhone = document.getElementById("phone").value;
-
-      fetch(`${apiBaseUrl}/employees/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: updatedName, position: updatedPosition, email: updatedEmail, phone: updatedPhone }),
-      })
-        .then(() => {
-          fetchEmployees();
-          document.getElementById("employeeForm").reset();
-          document.getElementById("employeeForm").onsubmit = addEmployee;
-        });
-    };
-  }
-
-  // Add Employee
-  function addEmployee(e) {
-    e.preventDefault();
-    const name = document.getElementById("name").value;
-    const position = document.getElementById("position").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-
-    fetch(`${apiBaseUrl}/employees`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, position, email, phone }),
-    })
-      .then(() => fetchEmployees());
-  }
-
-  // Delete Employee
-  function deleteEmployee(id) {
-    fetch(`${apiBaseUrl}/employees/${id}`, { method: "DELETE" })
-      .then(() => fetchEmployees());
-  }
-
-  // Fetch and Display Form Submissions
-  function fetchForms() {
-    fetch(`${apiBaseUrl}/form`)
+  // Fetch and Display Emails
+  function fetchEmails() {
+    fetch(`${apiBaseUrl}/emails`)
       .then(response => response.json())
       .then(data => {
-        const formTable = document.getElementById("formTable");
-        formTable.innerHTML = data
+        const emailTable = document.getElementById("emailTable");
+        emailTable.innerHTML = data
           .map(
-            form => `
+            email => `
               <tr>
-                <td>${form.name}</td>
-                <td>${form.email}</td>
-                <td>${form.phone}</td>
-                <td>${form.message}</td>
+                <td>${email.email}</td>
                 <td>
-                  <button class="btn btn-sm btn-danger" onclick="deleteEmail('${form._id}')">Delete</button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteEmail('${email._id}')">Delete</button>
                 </td>
               </tr>`
           )
@@ -271,13 +242,172 @@
       });
   }
 
+  // Fetch and Display Messages
+  function fetchMessages() {
+    fetch(`${apiBaseUrl}/form`)
+      .then(response => response.json())
+      .then(data => {
+        const messageTable = document.getElementById("messageTable");
+        messageTable.innerHTML = data
+          .map(
+            message => `
+              <tr>
+                <td>${message.name}</td>
+                <td>${message.email}</td>
+                <td>${message.phone}</td>
+                <td>${message.message}</td>
+                <td>
+                  <button class="btn btn-sm btn-danger" onclick="deleteMessage('${message._id}')">Delete</button>
+                </td>
+              </tr>`
+          )
+          .join("");
+      });
+  }
+
+  // Show Edit Employee Modal
+  function editEmployee(id, name, position, email, phone) {
+    document.getElementById("employeeId").value = id;
+    document.getElementById("editName").value = name;
+    document.getElementById("editPosition").value = position;
+    document.getElementById("editEmail").value = email;
+    document.getElementById("editPhone").value = phone;
+
+    // Show the modal
+    new bootstrap.Modal(document.getElementById('editEmployeeModal')).show();
+  }
+
+  // Handle Edit Employee Form Submission
+  document.getElementById("editEmployeeForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const id = document.getElementById("employeeId").value;
+    const name = document.getElementById("editName").value;
+    const position = document.getElementById("editPosition").value;
+    const email = document.getElementById("editEmail").value;
+    const phone = document.getElementById("editPhone").value;
+
+    fetch(`${apiBaseUrl}/employees/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, position, email, phone })
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchEmployees();
+        new bootstrap.Modal(document.getElementById('editEmployeeModal')).hide();
+      });
+  });
+
+  // Handle Employee Form Submission
+  document.getElementById("employeeForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById("name").value;
+    const position = document.getElementById("position").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+
+    fetch(`${apiBaseUrl}/employees`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, position, email, phone })
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchEmployees();
+        document.getElementById("employeeForm").reset();
+      });
+  });
+
+  // Handle Email Form Submission
+  document.getElementById("emailForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const adminEmail = document.getElementById("adminEmail").value;
+
+    fetch(`${apiBaseUrl}/emails`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: adminEmail })
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchEmails();
+        document.getElementById("emailForm").reset();
+      });
+  });
+
+  // Delete Employee
+  function deleteEmployee(id) {
+    fetch(`${apiBaseUrl}/employees/${id}`, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchEmployees();
+      });
+  }
+
   // Delete Email
   function deleteEmail(id) {
-    fetch(`${apiBaseUrl}/form/${id}`, { method: "DELETE" })
-      .then(() => fetchForms());
+    fetch(`${apiBaseUrl}/emails/${id}`, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchEmails();
+      });
   }
+
+  // Delete Message
+  function deleteMessage(id) {
+    fetch(`${apiBaseUrl}/form/${id}`, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .then(() => {
+        fetchMessages();
+      });
+  }
+
+  // Handle Tab Switching
+  document.getElementById("employeeLink").addEventListener("click", function() {
+    document.getElementById("employeeSection").style.display = 'block';
+    document.getElementById("emailSection").style.display = 'none';
+    document.getElementById("messageSection").style.display = 'none';
+    fetchEmployees();
+  });
+
+  document.getElementById("emailLink").addEventListener("click", function() {
+    document.getElementById("employeeSection").style.display = 'none';
+    document.getElementById("emailSection").style.display = 'block';
+    document.getElementById("messageSection").style.display = 'none';
+    fetchEmails();
+  });
+
+  document.getElementById("messageLink").addEventListener("click", function() {
+    document.getElementById("employeeSection").style.display = 'none';
+    document.getElementById("emailSection").style.display = 'none';
+    document.getElementById("messageSection").style.display = 'block';
+    fetchMessages();
+  });
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", function() {
+    fetchEmployees();
+    fetchEmails();
+    fetchMessages();
+  });
 </script>
 
+<!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
