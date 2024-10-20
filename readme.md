@@ -22,7 +22,7 @@ STM Roofing Limited is a New Zealand-based construction and roofing services com
 ## Screenshot
 
 ![STM Roofing Limited](./screenshot.png)
-
+![STM Roofing Limited Dashboard](./css/d1.png) 
 ## Getting Started
 
 To get a local copy up and running, follow these steps:
